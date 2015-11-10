@@ -7,7 +7,7 @@
 // config
 // --------------------
 @import "config-assets";
-@import "config-variables";
+@import "themes/credo/config-variables";
 
 // vendor
 // --------------------
@@ -20,10 +20,10 @@
 
 // app styling
 // --------------------
-@import 'base';
+@import 'themes/credo/base';
 @import 'sticky-footer';
 
 // utility/misc.
 // --------------------
-@import 'developer';    // developer-friendly file: add rough/WIP styling that needs UI triage
+@import 'themes/credo/developer';    // developer-friendly file: add rough/WIP styling that needs UI triage
 @import 'shame';        // shame file - used for any bad-form/orphaned css

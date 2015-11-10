@@ -3,11 +3,26 @@
 
 {#  Translators: Application here refers to the web site/application being used (e.g. the dashboard). #}
 <footer class="footer" aria-label="{% trans "Application" %}">
-  {% if show_feedback %}
-  <div class="feedback">
-    <div class="container">
-      <div class="row">
 
+  <div class="container">
+    <div class="row colophon">
+      <nav class="nav-colophon" aria-label="${_('About')}">
+        <ol>
+          <li class="nav-colophon-01">
+            <a id="about" href="http://corp.credoreference.com/about-credo/about-credo.html" target="_blank">About Credo</a>
+          </li>
+          <li class="nav-colophon-01">
+            <a id="faq" href="/faq" target="_blank">FAQ</a>
+          </li>
+          <li class="nav-colophon-01">
+            <a id="contact" href="http://corp.credoreference.com/about-credo/contact.html" target="_blank">Contact Us</a>
+          </li>
+        </ol>
+      </nav>
+    </div>
+
+    {% if show_feedback %}
+      <div class="row feedback">
         {% captureas support_link_start %}
           <a class="support-email" href="mailto:{% settings_value 'SUPPORT_EMAIL' %}">{% endcaptureas %}
         {% captureas support_link_end %}</a>{% endcaptureas %}
@@ -15,30 +30,19 @@
         {% captureas email_link %}
           <a class="feedback-email" href="mailto:{{ feedback_email }}?Subject={% trans "Feedback" %}">{{ feedback_email }}</a>
         {% endcaptureas %}
-        {% blocktrans trimmed %}We want this dashboard to work for you! Need help? {{ support_link_start }}Contact course team support{{ support_link_end }}. Comments or suggestions? Email {{ email_link }}.{% endblocktrans %}
+        {% blocktrans trimmed %}We want this dashboard to work for you! Need help? {{ support_link_start }}Visit our support forum{{ support_link_end }}. Comments or suggestions? Email {{ email_link }}.{% endblocktrans %}
       </div>
+    {% endif %}
+
+    <div class="row wrapper-logo">
+      <p>
+        <a href="/"><img alt="{{ platform_name }}" src="/static/images/credo-logo-black.png"></a>
+      </p>
+    </div>
+
+    <div class="row copyright">
+      &copy; {{ platform_name }}. {% blocktrans %}All rights reserved except where noted. EdX, Open edX and the edX and Open EdX logos are registered trademarks or trademarks of edX Inc.{% endblocktrans %}
     </div>
   </div>
-  {% endif %}
-  <div class="legal">
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-6 col-md-6">
-          <a href="{{ terms_of_service_url }}" target="_blank" data-role="tos">
-            {% blocktrans %}Terms of Service{% endblocktrans %}
-          </a>
-          &nbsp;
-          <a href="{{ privacy_policy_url }}" target="_blank" data-role="privacy-policy">
-            {% blocktrans %}Privacy Policy{% endblocktrans %}
-          </a>
-        </div>
-        <div class="col-xs-6 col-md-6 text-right">
-          {% captureas current_year %}{% now "Y" %}{% endcaptureas %}
-          {# Translators: The © symbol appears directly before this line. #}
-          <p class="copyright">© {% blocktrans %} {{ current_year }} {{ platform_name }}, except where noted, all rights
-            reserved. {% endblocktrans %}</p>
-        </div>
-      </div>
-    </div>
-  </div>
+
 </footer>

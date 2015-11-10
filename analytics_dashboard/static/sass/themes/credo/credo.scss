@@ -1,0 +1,19 @@
+$brand-logo-path: '/static/images/credo-logo-black.png' !default;
+$brand-logo-width: 132px !default;
+$brand-logo-height: 58px !default;
+
+@import "../../mixins";
+
+.masthead-brand-logo {
+  @include brand-logo($brand-logo-path, $brand-logo-width, $brand-logo-height, 60px);
+}
+
+.navbar-brand {
+  .navbar-brand-logo {
+    @include brand-logo($brand-logo-path, $brand-logo-width, $brand-logo-height, 40px);
+  }
+
+  .navbar-brand-app {
+    margin-top: -9px;
+  }
+}

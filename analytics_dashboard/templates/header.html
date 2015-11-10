@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load firstof from future %}
+{% load dashboard_extras %}
 
 {% comment %}
 Partial: App-wide header element
@@ -19,7 +20,7 @@ Partial: App-wide header element
       {% if course_id %}
       <ul class="nav navbar-nav">
         <li>
-          <a href="{% url 'courses:home' course_id=course_id %}" class="navbar-link active-course-name">{% firstof course_name course_id %}</a>
+          <a href="{% url 'courses:home' course_id=course_id %}" class="navbar-link active-course-name">{{ course_key|format_course_key }}</a>
         </li>
       </ul>
       {% endif %}
