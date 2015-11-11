@@ -513,6 +513,11 @@ class CourseHome(CourseTemplateWithNavView):
                         'title': _('How are students doing on ungraded exercises?'),
                         'view': 'courses:performance:ungraded_content',
                         'breadcrumbs': [_('Ungraded Problems')]
+                    },
+                    {
+                        'title': _('How are students doing on understanding learning outcomes?'),
+                        'view': 'courses:performance:learning_outcomes',
+                        'breadcrumbs': [_('Learning Outcomes')]
                     }
                 ]
             })
