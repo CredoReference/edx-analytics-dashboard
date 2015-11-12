@@ -115,6 +115,13 @@ class PerformanceGradedContentTemplateView(PerformanceTemplateView):
 
         return context
 
+class PerformanceLearningOutcomesTemplateView(PerformanceTemplateView):
+    page_title = _('Learning Outcomes')
+    no_data_message = _('No submissions received for these exercises.')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(PerformanceLearningOutcomesTemplateView, self).dispatch(request, *args, **kwargs)
+
 
 class PerformanceAnswerDistributionMixin(object):
     presenter = None
@@ -285,3 +292,31 @@ class PerformanceUngradedAnswerDistribution(PerformanceAnswerDistributionMixin,
     template_name = 'courses/performance_ungraded_answer_distribution.html'
     page_name = 'performance_ungraded_answer_distribution'
     page_title = _('Performance: Problem Submissions')
+
+
+class PerformanceLearningOutcomes(PerformanceLearningOutcomesTemplateView):
+    template_name = 'courses/performance_learning_outcomes.html'
+    page_name = 'performance_learning_outcomes'
+
+    def get_context_data(self, **kwargs):
+        context = super(PerformanceLearningOutcomesTemplateView, self).get_context_data(**kwargs)
+
+        # dummy data for demo purposes
+        context['js_data']['course'].update({
+            'hasData': True,
+            'contentTableHeading': _('Section Name'),
+            'primaryContent': [{
+                'name': 'Critical Thinking',
+                'url': '#'
+            }, {
+                'name': 'Information Literacy',
+                'url': '#'
+            }]
+        })
+
+        context.update({
+            'page_data': self.get_page_data(context)
+        })
+
+        return context
+

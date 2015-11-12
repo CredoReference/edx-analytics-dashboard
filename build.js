@@ -65,6 +65,10 @@
             exclude: ['js/common']
         },
         {
+            name: 'js/performance-learning-outcomes-main',
+            exclude: ['js/common']
+        },
+        {
             name: 'js/performance-answer-distribution-main',
             exclude: ['js/common']
         }

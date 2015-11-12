@@ -74,6 +74,8 @@ PERFORMANCE_URLS = patterns(
     url(r'^graded_content/assignments/{}/$'.format(ASSIGNMENT_ID_PATTERN),
         performance.PerformanceAssignment.as_view(),
         name='assignment'),
+
+    url(r'^learning_outcomes/$', performance.PerformanceLearningOutcomes.as_view(), name='learning_outcomes'),
 )
 
 CSV_URLS = patterns(
