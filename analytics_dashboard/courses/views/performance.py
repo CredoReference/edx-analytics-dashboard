@@ -30,7 +30,8 @@ class PerformanceTemplateView(CourseStructureExceptionMixin, CourseTemplateWithN
 
     secondary_nav_items = [
         {'name': 'graded_content', 'label': _('Graded Content'), 'view': 'courses:performance:graded_content'},
-        {'name': 'ungraded_content', 'label': _('Ungraded Problems'), 'view': 'courses:performance:ungraded_content'}
+        {'name': 'ungraded_content', 'label': _('Ungraded Problems'), 'view': 'courses:performance:ungraded_content'},
+        {'name': 'learning_outcomes', 'label': _('Learning Outcomes'), 'view': 'courses:performance:learning_outcomes'}
     ]
 
     active_primary_nav_item = 'performance'
@@ -117,6 +118,7 @@ class PerformanceGradedContentTemplateView(PerformanceTemplateView):
 
 class PerformanceLearningOutcomesTemplateView(PerformanceTemplateView):
     page_title = _('Learning Outcomes')
+    active_secondary_nav_item = 'learning_outcomes'
     no_data_message = _('No submissions received for these exercises.')
 
     def dispatch(self, request, *args, **kwargs):
