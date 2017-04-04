@@ -223,6 +223,7 @@ DJANGO_APPS = (
 LOCAL_APPS = (
     'core',
     'courses',
+    'orgs',
     'django_rjs',
     'help',
     'soapbox',
@@ -452,6 +453,7 @@ REST_FRAMEWORK = {
 ########## COURSE_ID_PATTERN
 # Regex used to capture course_ids from URLs
 COURSE_ID_PATTERN = r'(?P<course_id>[^/+]+[/+][^/+]+[/+][^/]+)'
+ORG_ID_PATTERN = r'(?P<org_id>[^/+]+)'
 ########## END COURSE_ID_PATTERN
 
 ########## LEARNER_API_LIST_DOWNLOAD_FIELDS

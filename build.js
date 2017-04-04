@@ -81,6 +81,18 @@
             exclude: ['js/common']
         },
         {
+            name: 'js/orgs-home',
+            exclude: ['js/common']
+        },
+        {
+            name: 'js/orgs-performance-learning-outcomes-content-main',
+            exclude: ['js/common']
+        },
+        {
+            name: 'js/orgs-performance-learning-outcomes-section-main',
+            exclude: ['js/common']
+        },
+        {
             name: 'apps/course-list/app/course-list-main',
             exclude: ['js/common']
         }

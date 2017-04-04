@@ -286,7 +286,7 @@ class CoursePerformancePresenter(CourseAPIPresenterMixin, CoursePresenter):
         return assignments
 
     def attach_aggregated_data_to_parent(self, index, parent, url_func=None):
-        children = parent['children']
+        children = parent.get('children', [])
         total_submissions = sum(child.get('total_submissions', 0) for child in children)
         correct_submissions = sum(child.get('correct_submissions', 0) for child in children)
         incorrect_submissions = total_submissions - correct_submissions

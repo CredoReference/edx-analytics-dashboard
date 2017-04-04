@@ -1,0 +1,46 @@
+{% extends "base_dashboard.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% load dashboard_extras %}
+
+{% block view-name %}view-course-list{% endblock view-name %}
+
+{% block title %}{% trans "Organizations" %} {{ block.super }}{% endblock title %}
+
+{% block header-text %}
+  <h3>
+    {% blocktrans with username=request.user.username %}Welcome, {{ username }}!{% endblocktrans %}
+  </h3>
+{% endblock %}
+
+{% block intro-text %}
+  {% blocktrans %}Here are the organizations you currently have access to in {{ application_name }}:{% endblocktrans %}
+{% endblock intro-text %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-8">
+
+      <div class="list-main">
+      <div>
+        <div class="section-data-table">
+            <div class="course-list-table table-responsive">
+               <table class="table table-striped dataTable">
+                 <tbody>
+                 {% for org in orgs %}
+               <tr>
+                 <td>
+                   <a href="{% url 'orgs:org_home' org_id=org.key %}">
+                     <span class="course-name">{{ org.name }}</span></a>
+                 </td>
+               </tr>
+                 {% endfor %}
+               </tbody>
+               </table>
+            </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -178,12 +178,16 @@ class CourseContextMixin(CourseAPIMixin, TrackedViewMixin, LazyEncoderMixin):
         context = super(CourseContextMixin, self).get_context_data(**kwargs)
         context.update(self.get_default_data())
 
+        org = None
+        if self.course_id:
+            org = CourseKey.from_string(self.course_id).org
+
         user = self.request.user
         context['js_data'] = context.get('js_data', {})
         context['js_data'].update({
             'course': {
                 'courseId': self.course_id,
-                'org': CourseKey.from_string(self.course_id).org
+                'org': org
             },
             'user': {
                 'username': user.get_username(),
@@ -192,6 +196,9 @@ class CourseContextMixin(CourseAPIMixin, TrackedViewMixin, LazyEncoderMixin):
                 'email': user.email,
                 'ignoreInReporting': self._ignore_in_reporting(user)
             },
+            'org': {
+                'org_id': org
+            }
         })
 
         return context

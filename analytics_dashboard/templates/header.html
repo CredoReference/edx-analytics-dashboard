@@ -17,7 +17,7 @@ Partial: App-wide header element
       </button>
 
       {% include 'brand.html' with class_prefix='navbar' %}
-      {% if course_id %}
+      {% if course_id and not org_id %}
       <ul class="nav navbar-nav">
         <li>
             {% captureas course_home_url %}{% url 'courses:home' course_id=course_id %}{% endcaptureas %}
@@ -27,6 +27,21 @@ Partial: App-wide header element
                 data-track-url="{{ course_home_url }}" data-track-target-scope="course"
                 data-track-target-lens="home" data-track-menu-depth="home" data-track-link-name="course_title">
                 {% firstof course_name course_id %}</a>
+        </li>
+      </ul>
+      {% elif org_id %}
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="{% url 'orgs:org_home' org_id=org_id %}" class="navbar-link active-course-name">{% trans 'Organization' %}: {{org_id}}</a>
+        </li>
+      </ul>
+      {% else %}
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="{% url 'courses:index' %}" class="navbar-link active-course-name">Courses</a>
+        </li>
+        <li>
+          <a href="{% url 'orgs:orgs_index' %}" class="navbar-link active-course-name">Organizations</a>
         </li>
       </ul>
       {% endif %}
