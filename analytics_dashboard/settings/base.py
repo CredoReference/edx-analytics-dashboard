@@ -231,6 +231,9 @@ LOCAL_APPS = (
 THIRD_PARTY_APPS = (
     'release_util',
     'rest_framework',
+
+    # Library to send info to Sentry
+    'raven.contrib.django.raven_compat',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -470,6 +473,10 @@ REST_FRAMEWORK = {
 # Regex used to capture course_ids from URLs
 COURSE_ID_PATTERN = r'(?P<course_id>[^/+]+[/+][^/+]+[/+][^/]+)'
 ########## END COURSE_ID_PATTERN
+
+########## SENTRY SETTINGS
+RAVEN_CONFIG = {}
+########## END SENTRY SETTINGS
 
 ########## LEARNER_API_LIST_DOWNLOAD_FIELDS
 # Comma-delimited list of field names to include in the Learner List CSV download
