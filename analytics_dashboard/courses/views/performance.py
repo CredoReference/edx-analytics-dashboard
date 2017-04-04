@@ -365,18 +365,21 @@ class PerformanceUngradedAnswerDistribution(PerformanceAnswerDistributionMixin,
 class PerformanceLearningOutcomesMixin(PerformanceTemplateView):
     active_secondary_nav_item = 'learning_outcomes'
     tags_presenter = None
+    selected_tag_key = None
     selected_tag_value = None
     update_message = _('Tags distribution data was last updated %(update_date)s at %(update_time)s UTC.')
     no_data_message = _('No submissions received for these exercises.')
+    tags_nav_lst = ['learning_outcome', 'learning_outcome_custom']
 
     def get_context_data(self, **kwargs):
         context = super(PerformanceLearningOutcomesMixin, self).get_context_data(**kwargs)
 
+        self.selected_tag_key = kwargs.get('tag_key', None)
         self.selected_tag_value = kwargs.get('tag_value', None)
         self.tags_presenter = TagsDistributionPresenter(self.access_token, self.course_id)
 
         first_level_content_nav, first_selected_item = self.tags_presenter.get_tags_content_nav(
-            'learning_outcome', self.selected_tag_value)
+            self.tags_nav_lst, self.selected_tag_key, self.selected_tag_value)
 
         context['selected_tag_value'] = self.selected_tag_value
         context['update_message'] = self.get_last_updated_message(self.tags_presenter.last_updated)
@@ -400,7 +403,7 @@ class PerformanceLearningOutcomesContent(PerformanceLearningOutcomesMixin):
     def get_context_data(self, **kwargs):
         context = super(PerformanceLearningOutcomesContent, self).get_context_data(**kwargs)
 
-        tags_distribution = self.tags_presenter.get_tags_distribution('learning_outcome')
+        tags_distribution = self.tags_presenter.get_tags_distribution(self.tags_nav_lst)
 
         course_data = {'tagsDistribution': tags_distribution,
                        'hasData': bool(tags_distribution),
@@ -436,7 +439,7 @@ class PerformanceLearningOutcomesSection(PerformanceLearningOutcomesMixin):
             if self.problem_id in assignments and len(assignments[self.problem_id]['part_ids']) > 0:
                 self.part_id = assignments[self.problem_id]['part_ids'][0]
 
-        modules_marked_with_tag = self.tags_presenter.get_modules_marked_with_tag('learning_outcome',
+        modules_marked_with_tag = self.tags_presenter.get_modules_marked_with_tag(self.selected_tag_key,
                                                                                   self.selected_tag_value)
         course_data = {'tagsDistribution': modules_marked_with_tag,
                        'hasData': bool(modules_marked_with_tag),

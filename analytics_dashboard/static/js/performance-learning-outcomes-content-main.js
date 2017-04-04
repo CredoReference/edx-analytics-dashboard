@@ -26,7 +26,8 @@ require(['vendor/domReady!', 'load/init-page'], function(doc, page) {
                 ],
                 tableColumns = [
                     {key: 'index', title: gettext('Order'), type: 'number', className: 'text-right'},
-                    {key: 'name', title: model.get('contentTableHeading'), type: 'hasNull'}
+                    {key: 'tag_value', title: model.get('contentTableHeading'), type: 'hasNull'},
+                    {key: 'tag_key_title', title: 'Outcome Type', type: 'hasNull'}
                 ],
                 performanceLoContentChart,
                 performanceLoContentTable;
