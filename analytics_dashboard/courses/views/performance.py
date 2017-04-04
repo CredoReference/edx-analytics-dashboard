@@ -381,6 +381,7 @@ class PerformanceLearningOutcomesMixin(PerformanceTemplateView):
         first_level_content_nav, first_selected_item = self.tags_presenter.get_tags_content_nav(
             self.tags_nav_lst, self.selected_tag_key, self.selected_tag_value)
 
+        context['selected_tag_key'] = self.selected_tag_key
         context['selected_tag_value'] = self.selected_tag_value
         context['update_message'] = self.get_last_updated_message(self.tags_presenter.last_updated)
         context['js_data'] = {

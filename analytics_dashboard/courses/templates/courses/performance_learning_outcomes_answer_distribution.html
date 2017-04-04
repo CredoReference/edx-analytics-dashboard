@@ -7,5 +7,5 @@
 {% endblock %}
 
 {% block problem_part_url %}
-    {% url 'courses:performance:learning_outcomes_answers_distribution_with_part' tag_value=selected_tag_value course_id=course_id problem_id=problem_id problem_part_id=question.part_id %}
+    {% url 'courses:performance:learning_outcomes_answers_distribution_with_part' tag_key=selected_tag_key tag_value=selected_tag_value course_id=course_id problem_id=problem_id problem_part_id=question.part_id %}
 {% endblock %}

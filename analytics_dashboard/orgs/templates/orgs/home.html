@@ -1,0 +1,85 @@
+{% extends "orgs/base-org.html" %}
+{% load i18n %}
+{% load rjs %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script src="{% static_rjs 'js/orgs-home.js' %}"></script>
+{% endblock javascript %}
+
+{% block view-name %}view-org-home view-dashboard{% endblock view-name %}
+
+{% block lens_navigation %}
+  <nav class="navbar navbar-default lens-nav" role="navigation" aria-label="{% trans 'Application' %}">
+    <div class="grid-container">
+      <ul class="nav navbar-nav">
+        <li class="active nav-section">
+          <div class="course-label">{% trans "Organization Home" %}</div>
+          <span class="sr-only">({% trans "Active" %})</span>
+        </li>
+
+        {% for item in primary_nav_items %}
+          <li>
+              <a href="{{ item.href }}{{ item.fragment }}"><span class="link-label">
+                  {% if item.icon %}<span class="ico fa {{ item.icon }}" aria-hidden="true"></span>{% endif %}
+                {{ item.label }}
+              </span></a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </nav>
+{% endblock %}
+
+{% block child_content %}
+  <div class="course-home-table-outer">
+    {% for column in table_items %}
+      <div class="course-home-section">
+        <header class="heading-outer">
+          <div class="heading text-left">{{ column.heading }}</div>
+        </header>
+
+        <div class="course-home-table">
+          <div class="item name">
+            <span class="ico fa {{ column.icon }}" aria-hidden="true"></span> {{ column.name }}
+          </div>
+
+          {% for item in column.items %}
+            <div class="item">
+              <div class="title"><a href="{% url item.view org_id=org_id %}{{ item.fragment }}"
+                data-track-type="click" data-track-event="edx.bi.course.question_clicked"
+                data-track-category="{{ column.name|lower }}" data-track-question="{{ item.title }}"
+                data-track-url="{% url item.view org_id=org_id %}{{ item.fragment }}">{{ item.title }}</a></div>
+              <div class="breadcrumbs">
+                <span class="ico fa {{ column.icon }}" aria-hidden="true"></span>
+                <span class="ico fa fa-caret-right" aria-hidden="true"></span>
+                {% for breadcrumb in item.breadcrumbs %}
+                  {{ breadcrumb }}
+                  {% if not forloop.last %}
+                    <span class="ico fa fa-caret-right" aria-hidden="true"></span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if js_data.org.hasData %}
+  <section class="view-section">
+
+    <div class="section-heading section-data-table-title">
+      <h4 class="section-title">{{js_data.org.contentTableHeading}}</h4>
+    </div>
+
+    {% if js_data.org.courses %}
+      <div class="section-content section-data-table" data-role="data-table">
+        {% include "loading.html" %}
+      </div>
+    {% endif %}
+  </section>
+  {% endif %}
+
+{% endblock %}

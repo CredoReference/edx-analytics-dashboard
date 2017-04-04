@@ -1,0 +1,20 @@
+{% extends "courses/_base_content_nav.html" %}
+
+{% load i18n %}
+{% load dashboard_extras %}
+
+{% block home_content_url %}
+    {% url "orgs:performance:org_learning_outcomes" org_id=org_id courses_names=courses_names %}
+{% endblock %}
+
+{% block select_first_level %}
+    {% trans "Select Outcome" %}
+{% endblock %}
+
+{% block select_first_level_all %}
+  {% trans "All Outcomes" %}
+{% endblock %}
+
+{% block select_second_level %}
+    {% trans "Select Problem" %}
+{% endblock %}

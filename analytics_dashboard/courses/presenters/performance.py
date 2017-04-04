@@ -286,7 +286,7 @@ class CoursePerformancePresenter(CourseAPIPresenterMixin, CoursePresenter):
         return assignments
 
     def attach_aggregated_data_to_parent(self, index, parent, url_func=None):
-        children = parent['children']
+        children = parent.get('children', [])
         total_submissions = sum(child.get('total_submissions', 0) for child in children)
         correct_submissions = sum(child.get('correct_submissions', 0) for child in children)
         incorrect_submissions = total_submissions - correct_submissions
@@ -511,7 +511,7 @@ class TagsDistributionPresenter(CourseAPIPresenterMixin, CoursePresenter):
             """
             updated_structure[node_id] = origin_structure[node_id]
             updated_structure[node_id]['parent'] = parent_id if parent_id else None
-            for child_id in origin_structure[node_id]["children"]:
+            for child_id in origin_structure[node_id].get("children", []):
                 _update_node(updated_structure, origin_structure, child_id, origin_structure[node_id]['id'])
 
         updated_structure = OrderedDict()

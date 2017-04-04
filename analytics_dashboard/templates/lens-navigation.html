@@ -4,11 +4,12 @@
 Partial for displaying the lens navigation and the sections within the lenses.
 {% endcomment %}
 
-{% if primary_nav_items %}
+{% if primary_nav_items or primary_nav_item %}
   {#  Translators: Application here refers to the web site/application being used (e.g. the dashboard). #}
   <nav class="navbar navbar-default lens-nav" role="navigation" aria-label="{% trans "Application" %}">
     <div class="grid-container">
       <ul class="nav navbar-nav">
+        {% if course_id and not org_id %}
         <li>
           {% captureas course_home_url %}{% url 'courses:home' course_id=course_id %}{% endcaptureas %}
           <a href="{{ course_home_url }}" class="course-label link-label"
@@ -20,8 +21,21 @@ Partial for displaying the lens navigation and the sections within the lenses.
             {% trans "Course Home" %}
           </a>
         </li>
+        {% elif org_id %}
+        <li>
+          {% captureas org_home_url %}{% url 'orgs:org_home' org_id=org_id %}{% endcaptureas %}
+          <a href="{{ org_home_url }}" class="course-label link-label"
+              data-track-type="click" data-track-event="edx.bi.ui.menu.navigated"
+              data-track-text="Org Home" data-track-url="{{ org_home_url }}"
+              data-track-target-scope="course" data-track-target-lens="home" data-track-menu-depth="home"
+              data-track-link-name="course_home">
+            {#  Translators: This refers to the homepage of a course. #}
+            {% trans "Org Home" %}
+          </a>
+        </li>
+        {% endif %}
         <li class="dropdown">
-          <button class="dropdown-toggle navbar-link" data-toggle="dropdown" id="lensPrimaryMenu"
+          <button {% if primary_nav_items %}class="dropdown-toggle navbar-link" data-toggle="dropdown"{% else %}class="navbar-link"{% endif %} id="lensPrimaryMenu"
               aria-controls="lensDropdownMenu">
             <span class="link-label">
               <span class="sr-only">{% trans "Navigation Menu." %}</span>
@@ -29,7 +43,9 @@ Partial for displaying the lens navigation and the sections within the lenses.
               {{ primary_nav_item.translated_text }}
               {# Translators: This refers to the active tab/navigation item. #}
               <span class="sr-only">({% trans "Active" %})</span>
+              {% if primary_nav_items %}
               <span class="ico ico-indicator fa fa-caret-down" aria-hidden="true"></span>
+              {% endif %}
             </span>
           </button>
 

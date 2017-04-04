@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^status/$', views.status, name='status'),
     url(r'^health/$', views.health, name='health'),
     url(r'^courses/', include('courses.urls')),
+    url(r'^orgs/', include('orgs.urls')),
     url(r'^admin/', admin.site.urls),
     # TODO: the namespace arg is deprecated, but python-social-auth urls.py doesn't specify app_name so we are stuck
     # using namespace. Once python-social-auth is updated to fix that, remove the namespace arg.
