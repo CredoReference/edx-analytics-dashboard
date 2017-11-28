@@ -231,7 +231,10 @@ LOCAL_APPS = (
 THIRD_PARTY_APPS = (
     'release_util',
     'rest_framework',
-    'social_django'
+    'social_django',
+
+    # Library to send info to Sentry
+    'raven.contrib.django.raven_compat',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -465,3 +468,7 @@ COURSE_SUMMARIES_CACHE_TIMEOUT = 3600  # 1 hour timeout
 ########## CDN CONFIGURATION
 CDN_DOMAIN = None  # production will not use a CDN for static assets if this is set to a falsy value
 ########## END CDN CONFIGURATION
+
+########## SENTRY SETTINGS
+RAVEN_CONFIG = {}
+########## END SENTRY SETTINGS

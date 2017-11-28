@@ -30,3 +30,6 @@ git+https://github.com/edx/edx-analytics-data-api-client.git@0.12.0#egg=edx-anal
 git+https://github.com/edx/opaque-keys.git@d45d0bd8d64c69531be69178b9505b5d38806ce0#egg=opaque-keys
 # custom opaque-key implementations for ccx
 git+https://github.com/jazkarta/ccx-keys.git@e6b03704b1bb97c1d2f31301ecb4e3a687c536ea#egg=ccx-keys
+
+# Library to send info to Sentry
+raven==6.3.0
