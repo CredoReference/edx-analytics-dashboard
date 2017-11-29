@@ -469,7 +469,7 @@ class TagsDistributionPresenter(CourseAPIPresenterMixin, CoursePresenter):
                         self.available_tags[tag_key].add(tag_value)
         return self.available_tags
 
-    def get_tags_content_nav(self, key, selected=None):
+    def get_tags_content_nav(self, key_lst, selected_key=None, selected_value=None):
         """
         This function is used to create dropdown list with all available values
         for some particular tag. The first argument is the tag key.
@@ -479,17 +479,19 @@ class TagsDistributionPresenter(CourseAPIPresenterMixin, CoursePresenter):
         selected_item = None
         tags = self.get_available_tags()
 
-        if key in tags:
-            for item in tags[key]:
-                val = {
-                    'id': item,
-                    'name': item,
-                    'url': reverse('courses:performance:learning_outcomes_section',
-                                   kwargs={'course_id': self.course_id,
-                                           'tag_value': slugify(item)})}
-                if selected == slugify(item):
-                    selected_item = val
-                result.append(val)
+        for key in key_lst:
+            if key in tags:
+                for item in tags[key]:
+                    val = {
+                        'id': item,
+                        'name': self._tag_name(key, item),
+                        'url': reverse('courses:performance:learning_outcomes_section',
+                                       kwargs={'course_id': self.course_id,
+                                               'tag_key': slugify(key),
+                                               'tag_value': slugify(item)})}
+                    if selected_key == slugify(key) and selected_value == slugify(item):
+                        selected_item = val
+                    result.append(val)
         return result, selected_item
 
     def _get_course_module_data(self):
@@ -517,33 +519,42 @@ class TagsDistributionPresenter(CourseAPIPresenterMixin, CoursePresenter):
             _update_node(updated_structure, origin_structure["blocks"], origin_structure['root'])
         return updated_structure
 
-    def get_tags_distribution(self, key):
+    def _tag_name(self, key, value=None):
+        k = key.replace('_', ' ').title()
+        return ': '.join([k, value]) if value else k
+
+    def get_tags_distribution(self, key_lst):
         tags_distribution_data = self._get_course_module_data()
 
         result = OrderedDict()
         index = 0
 
         for item in tags_distribution_data.values():
-            if key in item['tags']:
-                tag_values = item['tags'][key]
-                for tag_value in tag_values:
-                    if tag_value not in result:
-                        index += 1
-                        result[tag_value] = {
-                            'id': tag_value,
-                            'index': index,
-                            'name': tag_value,
-                            'num_modules': 0,
-                            'total_submissions': 0,
-                            'correct_submissions': 0,
-                            'incorrect_submissions': 0
-                        }
-                    result[tag_value]['num_modules'] += 1
-                    result[tag_value]['total_submissions'] += item['total_submissions']
-                    result[tag_value]['correct_submissions'] += item['correct_submissions']
-                    result[tag_value]['incorrect_submissions'] += item['incorrect_submissions']
+            for tag_key in key_lst:
+                if tag_key in item['tags']:
+                    tag_values = item['tags'][tag_key]
+                    for tag_value in tag_values:
+                        tag_name = self._tag_name(tag_key, tag_value)
+                        if tag_name not in result:
+                            index += 1
+                            result[tag_name] = {
+                                'id': tag_name,
+                                'index': index,
+                                'name': tag_name,
+                                'tag_key': tag_key,
+                                'tag_key_title': self._tag_name(tag_key),
+                                'tag_value': tag_value,
+                                'num_modules': 0,
+                                'total_submissions': 0,
+                                'correct_submissions': 0,
+                                'incorrect_submissions': 0
+                            }
+                        result[tag_name]['num_modules'] += 1
+                        result[tag_name]['total_submissions'] += item['total_submissions']
+                        result[tag_name]['correct_submissions'] += item['correct_submissions']
+                        result[tag_name]['incorrect_submissions'] += item['incorrect_submissions']
 
-        for tag_val, item in result.iteritems():
+        for _, item in result.iteritems():
             item.update({
                 'average_submissions': (item['total_submissions'] * 1.0) / item['num_modules'],
                 'average_correct_submissions': (item['correct_submissions'] * 1.0) / item['num_modules'],
@@ -554,7 +565,8 @@ class TagsDistributionPresenter(CourseAPIPresenterMixin, CoursePresenter):
                                                                   item['total_submissions']),
                 'url': reverse('courses:performance:learning_outcomes_section',
                                kwargs={'course_id': self.course_id,
-                                       'tag_value': slugify(tag_val)})
+                                       'tag_key': slugify(item['tag_key']),
+                                       'tag_value': slugify(item['tag_value'])})
             })
         return result.values()
 
@@ -563,22 +575,14 @@ class TagsDistributionPresenter(CourseAPIPresenterMixin, CoursePresenter):
         available_tags = self.get_available_tags()
         intermediate = OrderedDict()
 
-        def _get_tags_info(av_tags, tags):
-            """
-            Helper function to return information about all tags connected with the current item.
-            """
-            data = {}
-            for av_tag_key in av_tags:
-                if av_tag_key in tags and tags[av_tag_key]:
-                    data[av_tag_key] = u', '.join(tags[av_tag_key])
-                else:
-                    data[av_tag_key] = None
-            return data
-
         for item in tags_distribution_data.values():
-            if tag_key in item['tags']:
-                for item_tag_val in item['tags'][tag_key]:
-                    if tag_value == slugify(item_tag_val):
+            item_tags = {}
+            for k, v in item['tags'].iteritems():
+                item_tags[slugify(k)] = v
+
+            if tag_key in item_tags:
+                for tag_val in item_tags[tag_key]:
+                    if tag_value == slugify(tag_val):
                         val = {
                             'id': item['id'],
                             'name': item['id'],
@@ -591,11 +595,16 @@ class TagsDistributionPresenter(CourseAPIPresenterMixin, CoursePresenter):
                                                                               item['total_submissions']),
                             'url': reverse('courses:performance:learning_outcomes_answers_distribution',
                                            kwargs={'course_id': self.course_id,
+                                                   'tag_key': tag_key,
                                                    'tag_value': tag_value,
                                                    'problem_id': item['id']})
                         }
                         if available_tags:
-                            val.update(_get_tags_info(available_tags, item['tags']))
+                            for av_tag_key in available_tags:
+                                if av_tag_key in item['tags']:
+                                    val[av_tag_key] = item['tags'][av_tag_key]
+                                else:
+                                    val[av_tag_key] = None
                         intermediate[item['id']] = val
 
         result = []
